@@ -1,0 +1,7 @@
+{
+  "name": "Tebatravel",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

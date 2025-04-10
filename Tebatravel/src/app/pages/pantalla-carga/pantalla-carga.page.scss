@@ -1,0 +1,55 @@
+.pantalla-carga {
+  --background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: env(safe-area-inset-top) 0px env(safe-area-inset-bottom);
+  }
+
+  .top-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 0px;
+
+    .travel-logo {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  .middle-section {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0px;
+
+    .institution-logo {
+      height: 150px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .bottom-section {
+    width: 100%;
+    text-align: center;
+
+    .travel-footer {
+      width: 100%;
+      max-width: 100%;
+      display: block;
+      object-fit: contain;
+    }
+  }
+}
