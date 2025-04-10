@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pantalla-carga',
@@ -8,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PantallaCargaPage implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
+    setTimeout(() => {
+      this.router.navigateByUrl('/login');
+    }, 3000); // 3 segundos
   }
 
 }
