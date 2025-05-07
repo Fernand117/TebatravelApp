@@ -10,12 +10,12 @@
 
       <ion-item lines="none" class="input-item">
         <ion-icon slot="start" name="person-outline"></ion-icon>
-        <ion-input placeholder="Usuario" type="text" fill="outline"></ion-input>
+        <ion-input placeholder="Usuario" type="text" fill="outline" [(ngModel)]="usuario"></ion-input>
       </ion-item>
 
       <ion-item lines="none" class="input-item">
         <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
-        <ion-input placeholder="Contraseña" type="password" fill="outline"></ion-input>
+        <ion-input placeholder="Contraseña" type="password" fill="outline" [(ngModel)]="contrasena"></ion-input>
       </ion-item>
 
       <ion-button expand="block" class="login-button" color="danger" (click)="iniciarSesion()">
