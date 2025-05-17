@@ -11,7 +11,7 @@ import { EscuelaEntity } from '../models/escuela-entity';
   providedIn: 'root'
 })
 export class ApiServiceService {
-  private apiUrl = 'http://localhost:5161/api';
+  private apiUrl = 'https://tebatravelapi.utcv.edu.mx/api';
 
   constructor(private http: HttpClient) { }
 
