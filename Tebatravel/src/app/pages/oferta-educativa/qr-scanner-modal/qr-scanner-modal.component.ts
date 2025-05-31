@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { BarcodeFormat } from '@zxing/library';
+import { QRStorageService } from '../../../services/qr-storage.service';
 
 @Component({
   selector: 'app-qr-scanner-modal',
@@ -17,7 +18,8 @@ export class QrScannerModalComponent implements OnInit {
   
   constructor(
     private modalCtrl: ModalController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private qrStorageService: QRStorageService
   ) {}
 
   ngOnInit() {
@@ -130,8 +132,14 @@ export class QrScannerModalComponent implements OnInit {
     await alert.present();
   }
 
-  onCodeResult(resultString: string) {
-    this.modalCtrl.dismiss({ qr: resultString });
+  async onCodeResult(resultString: string) {
+    try {
+      await this.qrStorageService.saveQRScan(resultString);
+      this.modalCtrl.dismiss({ qr: resultString });
+    } catch (error) {
+      console.error('Error saving QR scan:', error);
+      this.mostrarAlertaError('Error al guardar el escaneo QR');
+    }
   }
 
   cerrar() {
@@ -153,4 +161,4 @@ export class QrScannerModalComponent implements OnInit {
     console.error('Error al escanear:', error);
     this.mostrarAlertaError(error.message);
   }
-} 
+}
