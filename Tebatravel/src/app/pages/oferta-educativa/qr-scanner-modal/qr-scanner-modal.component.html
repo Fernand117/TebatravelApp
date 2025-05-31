@@ -8,6 +8,45 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
-  <zxing-scanner (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+  <div *ngIf="isHttpContext" class="http-notice">
+    <ion-chip color="warning">
+      <ion-icon name="information-circle"></ion-icon>
+      <ion-label>Conexión HTTP</ion-label>
+    </ion-chip>
+  </div>
+
+  <div *ngIf="!hasPermission" class="permission-warning">
+    <ion-icon name="camera" color="warning" size="large"></ion-icon>
+    <h2>Acceso a la Cámara</h2>
+    <p>Para escanear códigos QR, necesitamos acceder a tu cámara.</p>
+    <p *ngIf="isHttpContext" class="http-warning">
+      Nota: En conexiones HTTP, algunos navegadores pueden restringir el acceso a la cámara.
+      Recomendamos usar Chrome en Android o Safari en iOS.
+    </p>
+    <ion-button [disabled]="isCheckingPermissions" (click)="checkPermissions()" expand="block" color="primary">
+      <ion-icon name="videocam-outline" slot="start"></ion-icon>
+      {{ isCheckingPermissions ? 'Solicitando acceso...' : 'Permitir acceso a la cámara' }}
+    </ion-button>
+  </div>
+
+  <div *ngIf="hasPermission && availableCameras.length === 0" class="permission-warning">
+    <ion-icon name="camera-outline" color="danger" size="large"></ion-icon>
+    <h2>No hay cámaras disponibles</h2>
+    <p>No se detectó ninguna cámara en tu dispositivo.</p>
+    <ion-button (click)="checkPermissions()" expand="block" color="primary">
+      <ion-icon name="refresh-outline" slot="start"></ion-icon>
+      Volver a intentar
+    </ion-button>
+  </div>
+
+  <zxing-scanner
+    *ngIf="hasPermission && availableCameras.length > 0"
+    [formats]="allowedFormats"
+    (scanSuccess)="onCodeResult($event)"
+    (permissionResponse)="onHasPermission($event)"
+    (camerasFound)="onCamerasFound($event)"
+    (scanError)="onScanError($event)"
+  ></zxing-scanner>
 </ion-content> 

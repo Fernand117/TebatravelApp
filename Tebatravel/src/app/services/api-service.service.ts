@@ -6,12 +6,14 @@ import { AlumnoEntity } from '../models/alumno-entity';
 import { LoginDTO } from '../models/login.dto';
 import { CarreraEntity } from '../models/carrera-entity';
 import { EscuelaEntity } from '../models/escuela-entity';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiServiceService {
-  private apiUrl = 'https://tebatravelapi.utcv.edu.mx/api';
+  private apiUrl = environment.apiUrl;
+  private baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) { }
 

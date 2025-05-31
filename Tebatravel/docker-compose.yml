@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  tebatravel-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tebatravel-frontend
+    ports:
+      - "172.16.10.6:4300:4300"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      tebatravel-network:
+        aliases:
+          - tebatravel-frontend
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4300"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  tebatravel-network:
+    name: tebatravel-network
+    external: true 

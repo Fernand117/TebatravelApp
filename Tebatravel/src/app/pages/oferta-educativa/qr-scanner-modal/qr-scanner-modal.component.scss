@@ -3,4 +3,60 @@ zxing-scanner {
   width: 100%;
   height: 60vh;
   margin: 0 auto;
+}
+
+.http-notice {
+  padding: 10px;
+  text-align: center;
+  
+  ion-chip {
+    margin: 0 auto;
+  }
+}
+
+.permission-warning {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  padding: 20px;
+
+  ion-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 10px;
+    color: var(--ion-color-dark);
+  }
+
+  p {
+    margin: 0 0 20px;
+    color: var(--ion-color-medium);
+    font-size: 1rem;
+    line-height: 1.4;
+    max-width: 300px;
+
+    &.http-warning {
+      font-size: 0.9rem;
+      color: var(--ion-color-warning);
+      border: 1px solid var(--ion-color-warning);
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      background: rgba(var(--ion-color-warning-rgb), 0.1);
+    }
+  }
+
+  ion-button {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 10px;
+    height: 48px;
+  }
 } 

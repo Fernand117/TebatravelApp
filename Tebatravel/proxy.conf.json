@@ -1,0 +1,14 @@
+{
+  "/api": {
+    "target": "https://tebatravelapi.utcv.edu.mx",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "headers": {
+      "Origin": "https://tebatravelapp.utcv.edu.mx",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    }
+  }
+} 
