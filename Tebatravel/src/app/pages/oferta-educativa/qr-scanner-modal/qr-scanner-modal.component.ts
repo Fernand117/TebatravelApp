@@ -15,7 +15,8 @@ export class QrScannerModalComponent implements OnInit {
   availableCameras: MediaDeviceInfo[] = [];
   isCheckingPermissions = false;
   isHttpContext = window.location.protocol === 'http:';
-  
+  selectedDevice: MediaDeviceInfo | undefined;
+  currentDevice: MediaDeviceInfo | undefined;
   constructor(
     private modalCtrl: ModalController,
     private alertController: AlertController,
@@ -53,8 +54,18 @@ export class QrScannerModalComponent implements OnInit {
     this.isCheckingPermissions = true;
 
     try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const cameras = devices.filter(device => device.kind === 'videoinput');
+      this.availableCameras = cameras;
+      
+      // Si hay cámaras disponibles, seleccionar la primera por defecto
+      if (cameras.length > 0) {
+        this.selectedDevice = cameras[0];
+      }
+
       const constraints = {
         video: {
+          deviceId: this.selectedDevice ? { exact: this.selectedDevice.deviceId } : undefined,
           facingMode: 'environment',
           width: { ideal: 1280 },
           height: { ideal: 720 }
@@ -64,9 +75,6 @@ export class QrScannerModalComponent implements OnInit {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       this.hasPermission = true;
       stream.getTracks().forEach(track => track.stop());
-
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const cameras = devices.filter(device => device.kind === 'videoinput');
       this.onCamerasFound(cameras);
 
     } catch (err: any) {
@@ -160,5 +168,10 @@ export class QrScannerModalComponent implements OnInit {
   onScanError(error: Error) {
     console.error('Error al escanear:', error);
     this.mostrarAlertaError(error.message);
+  }
+
+  async changeCamera(device: MediaDeviceInfo) {
+    this.selectedDevice = device;
+    await this.checkPermissions();
   }
 }

@@ -59,4 +59,13 @@ zxing-scanner {
     margin-top: 10px;
     height: 48px;
   }
-} 
+}
+
+.camera-selector {
+  padding: 10px;
+  background: var(--ion-color-light);
+  
+  ion-select {
+    width: 100%;
+  }
+}

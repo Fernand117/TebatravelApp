@@ -41,12 +41,26 @@
     </ion-button>
   </div>
 
+  <div *ngIf="hasPermission && availableCameras.length > 1" class="camera-selector">
+    <ion-list>
+      <ion-item>
+        <ion-label>Seleccionar Cámara</ion-label>
+        <ion-select [(ngModel)]="selectedDevice" (ionChange)="changeCamera($event.detail.value)">
+          <ion-select-option *ngFor="let camera of availableCameras" [value]="camera">
+            {{ camera.label || 'Cámara ' + (availableCameras.indexOf(camera) + 1) }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </div>
+
   <zxing-scanner
     *ngIf="hasPermission && availableCameras.length > 0"
     [formats]="allowedFormats"
+    [device]="selectedDevice"
     (scanSuccess)="onCodeResult($event)"
     (permissionResponse)="onHasPermission($event)"
     (camerasFound)="onCamerasFound($event)"
     (scanError)="onScanError($event)"
   ></zxing-scanner>
-</ion-content> 
+</ion-content>
