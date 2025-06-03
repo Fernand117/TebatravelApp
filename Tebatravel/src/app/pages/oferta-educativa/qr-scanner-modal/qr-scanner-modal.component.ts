@@ -3,6 +3,14 @@ import { ModalController, AlertController } from '@ionic/angular';
 import { BarcodeFormat } from '@zxing/library';
 import { QRStorageService } from '../../../services/qr-storage.service';
 
+interface QRCarreraData {
+  id: number;
+  nombre: string;
+  tsu?: string;
+  imagen: string;
+  tipo: 'carrera' | 'maestria';
+}
+
 @Component({
   selector: 'app-qr-scanner-modal',
   templateUrl: './qr-scanner-modal.component.html',
@@ -140,10 +148,33 @@ export class QrScannerModalComponent implements OnInit {
     await alert.present();
   }
 
+  private async validateQRData(scannedData: string): Promise<boolean> {
+    try {
+      // Intentar parsear los datos del QR
+      const qrData: QRCarreraData = JSON.parse(scannedData);
+      
+      // Validar que el objeto tenga la estructura correcta
+      if (!qrData.id || !qrData.nombre || !qrData.imagen || !qrData.tipo) {
+        await this.mostrarAlertaError('QR inválido: formato incorrecto');
+        return false;
+      }
+      
+      // Aquí puedes agregar la validación contra el arreglo de carreras
+      // Por ahora solo validamos la estructura
+      return true;
+    } catch (error) {
+      console.error('Error al validar datos del QR:', error);
+      await this.mostrarAlertaError('QR inválido: no se pudo procesar el contenido');
+      return false;
+    }
+  }
+
   async onCodeResult(resultString: string) {
     try {
-      await this.qrStorageService.saveQRScan(resultString);
-      this.modalCtrl.dismiss({ qr: resultString });
+      if (await this.validateQRData(resultString)) {
+        await this.qrStorageService.saveQRScan(resultString);
+        this.modalCtrl.dismiss({ qr: resultString });
+      }
     } catch (error) {
       console.error('Error saving QR scan:', error);
       this.mostrarAlertaError('Error al guardar el escaneo QR');

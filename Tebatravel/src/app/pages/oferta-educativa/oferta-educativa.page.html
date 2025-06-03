@@ -1,6 +1,5 @@
 <ion-content class="oferta-page" fullscreen="true">
   <div class="container">
-
     <div class="header-image">
       <img src="assets/images/oferta-educativa-header.png" alt="Encabezado Oferta Educativa" />
     </div>
@@ -8,11 +7,14 @@
     <div class="grid-carreras">
       <div *ngFor="let carrera of carreras; let i = index" class="carrera-item" (click)="abrirScanner(i)">
         <img [src]="carrera.imagen" [alt]="carrera.nombre" />
+        <div class="carrera-info">
+          <h3>{{carrera.nombre}}</h3>
+          <p *ngIf="carrera.tsu">{{carrera.tsu}}</p>
+        </div>
         <div class="check-overlay" *ngIf="carrera.escaneada">
           <ion-icon name="checkmark-circle" color="success" size="large"></ion-icon>
         </div>
       </div>
     </div>
-
   </div>
 </ion-content>
