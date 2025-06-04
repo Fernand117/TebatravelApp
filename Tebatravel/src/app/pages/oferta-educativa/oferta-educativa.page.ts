@@ -131,20 +131,6 @@ export class OfertaEducativaPage implements OnInit {
       imagen: 'assets/images/carrera-14.png',
       escaneada: false,
       tipo: 'carrera'
-    },
-    { 
-      id: 15,
-      nombre: 'Maestría en Gestión de proyectos estratégicos sostenibles',
-      imagen: 'assets/images/maestria-1.png',
-      escaneada: false,
-      tipo: 'maestria'
-    },
-    { 
-      id: 16,
-      nombre: 'Maestría en Ingeniería industrial en manufactura avanzada',
-      imagen: 'assets/images/maestria-2.png',
-      escaneada: false,
-      tipo: 'maestria'
     }
   ];
 
@@ -211,7 +197,6 @@ export class OfertaEducativaPage implements OnInit {
         }
       }
     });
-
     await modal.present();
   }
 
