@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { BarcodeFormat } from '@zxing/library';
 import { QRStorageService } from '../../../services/qr-storage.service';
+import { Input } from '@angular/core';
 
 interface QRCarreraData {
   id: number;
@@ -18,6 +19,7 @@ interface QRCarreraData {
   standalone: false,
 })
 export class QrScannerModalComponent implements OnInit {
+  @Input() expectedCarreraId: number | undefined;
   allowedFormats = [BarcodeFormat.QR_CODE];
   hasPermission = false;
   availableCameras: MediaDeviceInfo[] = [];
@@ -32,7 +34,6 @@ export class QrScannerModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('Is HTTP Context:', this.isHttpContext);
     if (this.isHttpContext) {
       this.checkHttpContext();
     } else {
@@ -86,7 +87,6 @@ export class QrScannerModalComponent implements OnInit {
 
     } catch (err: any) {
       console.error('Error al acceder a la cámara:', err);
-      console.error('Camera access error details:', err.name, err.message, err); // More detailed error logging
       this.hasPermission = false;
       
       if (err.name === 'NotAllowedError') {
@@ -148,15 +148,37 @@ export class QrScannerModalComponent implements OnInit {
     await alert.present();
   }
 
+  private cleanJsonString(jsonString: string): string {
+    // 1. Add double quotes around unquoted keys (e.g., id: -> "id":)
+    let cleanedString = jsonString.replace(/([a-zA-Z0-9_]+):/g, '"$1":');
+
+    // 2. Replace single quotes with double quotes for string values
+    cleanedString = cleanedString.replace(/'([^']*)'/g, '"$1"');
+
+    // 3. Remove trailing commas before closing braces or brackets
+    cleanedString = cleanedString.replace(/,(\s*[}\]])/g, '$1');
+
+    // 4. Remove any trailing comma at the very end of the string
+    cleanedString = cleanedString.replace(/,\s*$/, '');
+
+    return cleanedString;
+  }
+
   private async validateQRData(scannedData: string): Promise<boolean> {
     try {
       // Intentar parsear los datos del QR
-      console.log('Scanned Data:', scannedData);
-      const qrData: QRCarreraData = JSON.parse(scannedData);
+      const cleanedData = this.cleanJsonString(scannedData);
+      const qrData: QRCarreraData = JSON.parse(cleanedData);
       
       // Validar que el objeto tenga la estructura correcta
       if (!qrData.id || !qrData.nombre || !qrData.imagen || !qrData.tipo) {
         await this.mostrarAlertaError('QR inválido: formato incorrecto');
+        return false;
+      }
+
+      // Validar que el ID del QR coincida con el ID de la carrera esperada
+      if (this.expectedCarreraId !== undefined && qrData.id !== this.expectedCarreraId) {
+        await this.mostrarAlertaError('El QR escaneado no corresponde a la carrera seleccionada.');
         return false;
       }
       
@@ -165,7 +187,6 @@ export class QrScannerModalComponent implements OnInit {
       return true;
     } catch (error) {
       console.error('Error al validar datos del QR:', error);
-      console.error('Error object details:', error); // Log the full error object
       await this.mostrarAlertaError('QR inválido: no se pudo procesar el contenido');
       return false;
     }

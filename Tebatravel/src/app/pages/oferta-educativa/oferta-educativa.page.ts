@@ -170,7 +170,10 @@ export class OfertaEducativaPage implements OnInit {
     }
 
     const modal = await this.modalCtrl.create({
-      component: QrScannerModalComponent
+      component: QrScannerModalComponent,
+      componentProps: {
+        expectedCarreraId: carrera.id
+      }
     });
 
     modal.onDidDismiss().then(async result => {
