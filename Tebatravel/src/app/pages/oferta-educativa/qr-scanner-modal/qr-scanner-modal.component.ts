@@ -32,6 +32,7 @@ export class QrScannerModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('Is HTTP Context:', this.isHttpContext);
     if (this.isHttpContext) {
       this.checkHttpContext();
     } else {
@@ -74,9 +75,7 @@ export class QrScannerModalComponent implements OnInit {
       const constraints = {
         video: {
           deviceId: this.selectedDevice ? { exact: this.selectedDevice.deviceId } : undefined,
-          facingMode: 'environment',
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
+          facingMode: 'environment'
         }
       };
 
@@ -87,6 +86,7 @@ export class QrScannerModalComponent implements OnInit {
 
     } catch (err: any) {
       console.error('Error al acceder a la cámara:', err);
+      console.error('Camera access error details:', err.name, err.message, err); // More detailed error logging
       this.hasPermission = false;
       
       if (err.name === 'NotAllowedError') {
@@ -151,6 +151,7 @@ export class QrScannerModalComponent implements OnInit {
   private async validateQRData(scannedData: string): Promise<boolean> {
     try {
       // Intentar parsear los datos del QR
+      console.log('Scanned Data:', scannedData);
       const qrData: QRCarreraData = JSON.parse(scannedData);
       
       // Validar que el objeto tenga la estructura correcta
@@ -164,6 +165,7 @@ export class QrScannerModalComponent implements OnInit {
       return true;
     } catch (error) {
       console.error('Error al validar datos del QR:', error);
+      console.error('Error object details:', error); // Log the full error object
       await this.mostrarAlertaError('QR inválido: no se pudo procesar el contenido');
       return false;
     }
